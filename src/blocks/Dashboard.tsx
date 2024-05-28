@@ -86,7 +86,9 @@ export function Dashboard() {
       console.error("Failed to delete consultation:", error)
     }
   }
-  function formatDate(date) {
+
+  //@ts-ignore
+  function formatDate(date:any) {
     return format(new Date(), "MMMM do yyyy")
   }
 
