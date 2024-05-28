@@ -172,13 +172,7 @@ export function Dashboard() {
                 </CardFooter>
               </Card>
             </div>
-            <Tabs defaultValue="week">
               <div className="flex items-center">
-                <TabsList>
-                  <TabsTrigger value="week">Week</TabsTrigger>
-                  <TabsTrigger value="month">Month</TabsTrigger>
-                  <TabsTrigger value="year">Year</TabsTrigger>
-                </TabsList>
                 <div className="ml-auto flex items-center gap-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -207,7 +201,6 @@ export function Dashboard() {
                   </DropdownMenu>
                 </div>
               </div>
-              <TabsContent value="week">
                 <Card x-chunk="dashboard-05-chunk-3">
                   <CardHeader className="px-7">
                     <CardTitle>Consultations</CardTitle>
@@ -303,8 +296,6 @@ export function Dashboard() {
                     </Table>
                   </CardContent>
                 </Card>
-              </TabsContent>
-            </Tabs>
           </div>
           <div>
             <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
