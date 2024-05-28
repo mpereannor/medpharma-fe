@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Link } from "react-router-dom"
-import { ListFilter, Search } from "lucide-react"
+import { ListFilter, Search, MoreHorizontal } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -44,14 +44,16 @@ import {
 } from "@/components/ui/table"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { useQueryClient, useQuery } from "react-query"
+import { useQueryClient, useQuery, useMutation } from "react-query"
 import { useAuth0 } from "@auth0/auth0-react"
 import { format } from "date-fns"
 import { convertToEmail } from "../utils"
+import { useNavigate } from "react-router-dom"
 
 export function Dashboard() {
   const token = localStorage?.getItem("token")
-
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { isLoading, error, data } = useQuery("consultations", async () => {
     const res = await fetch(`${import.meta.env.VITE_REST_API}/consultations`, {
       method: "GET",
@@ -70,9 +72,32 @@ export function Dashboard() {
     return <div>Error</div>
   }
 
+  const handleDeleteConsultation = async (consultationId: string) => {
+    try {
+      await fetch(
+        `${import.meta.env.VITE_REST_API}/consultations/${consultationId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      queryClient.invalidateQueries("consultations")
+    } catch (error) {
+      console.error("Failed to delete consultation:", error)
+    }
+  }
   function formatDate(date) {
     return format(new Date(), "MMMM do yyyy")
   }
+
+  function handleEditConsultation(consultationId: string) {
+    navigate(`/consultation/${consultationId}`)
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40 ">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -233,6 +258,43 @@ export function Dashboard() {
                               </TableCell>
                               <TableCell className="hidden md:table-cell">
                                 {consultation.healthcareProvider}
+                              </TableCell>
+                              <TableCell>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button
+                                      aria-haspopup="true"
+                                      size="icon"
+                                      variant="ghost"
+                                    >
+                                      <MoreHorizontal className="h-4 w-4" />
+                                      <span className="sr-only">
+                                        Toggle menu
+                                      </span>
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>
+                                      Actions
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleEditConsultation(consultation.id)
+                                      }
+                                    >
+                                      Edit
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleDeleteConsultation(
+                                          consultation.id
+                                        )
+                                      }
+                                    >
+                                      Delete
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </TableCell>
                             </>
                           </TableRow>

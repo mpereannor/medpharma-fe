@@ -16,6 +16,8 @@ function App() {
       <Route path="/" element={<MainPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/consultation" element={<ConsultationPage />} />
+      <Route path="/consultation/:id" element={<ConsultationPage />} />
+
     </Routes>
   )
 }

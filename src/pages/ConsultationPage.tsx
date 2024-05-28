@@ -41,9 +41,13 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { toast } from "../../@/components/ui/use-toast"
-import { useMutation } from "react-query"
+import { useMutation, useQueryClient } from "react-query"
+import { useParams } from "react-router-dom"
+import { queryClient } from "../client"
 
 const ConsultationPage: React.FC = () => {
+  const { id } = useParams()
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -100,7 +104,7 @@ const ConsultationPage: React.FC = () => {
           </DropdownMenu>
         </header>
         <div className="min-h-80 flex items-center justify-center mt-8">
-          <ConsultationForm />
+          <ConsultationForm consultationId={id} />
         </div>
       </div>
     </div>
@@ -129,9 +133,13 @@ const FormSchema = z.object({
 })
 type FormSchemaType = z.infer<typeof FormSchema>
 
-export function ConsultationForm() {
+export function ConsultationForm({
+  consultationId,
+}: {
+  consultationId: string
+}) {
   const token = localStorage?.getItem("token")
-
+  const queryClient = useQueryClient()
   const mutation = useMutation((bookConsultation) =>
     fetch(`${import.meta.env.VITE_REST_API}/consultations`, {
       method: "POST",
@@ -143,7 +151,51 @@ export function ConsultationForm() {
       body: JSON.stringify(bookConsultation),
     }).then((res) => res.json())
   )
+  const useUpdateDataByIdMutation = () => {
+    const mutation = useMutation(({ consultationId, newConsultationData }) => {
+      fetch(
+        `${import.meta.env.VITE_REST_API}/consultations/${consultationId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newConsultationData),
+        }
+      ).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to update data")
+        }
+        return res.json()
+      })
+    })
 
+    return mutation
+  }
+
+  const updateMuation = useUpdateDataByIdMutation()
+
+  const handleUpdateConsultation = async (
+    consultationId: string,
+    updatedData: any
+  ) => {
+    try {
+      await fetch(`${import.meta.env.VITE_REST_API}/consultations/${consultationId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      })
+      queryClient.invalidateQueries("consultations")
+    } catch (error) {
+      console.error("Failed to update consultation:", error)
+    }
+  }
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -165,9 +217,27 @@ export function ConsultationForm() {
     form.reset()
   }
 
+  const onUpdateSubmit = (newData: FormSchemaType) => {
+    const updatedData = {
+      ...newData,
+      officerId: localStorage?.getItem("userId"),
+    }
+    console.log("newData", updatedData, consultationId)
+    handleUpdateConsultation(consultationId, updatedData)
+    form.reset()
+  }
+  const dynamicSubmit = form.handleSubmit(
+    consultationId && consultationId.length > 0 ? onUpdateSubmit : onSubmit
+  )
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/3 space-y-6">
+      <form onSubmit={dynamicSubmit} className="w-1/3 space-y-6">
+        <div>
+          {consultationId && consultationId.length > 0
+            ? "Edit Consultation"
+            : "Book Consultation"}
+        </div>
         <FormField
           control={form.control}
           name="patient"
@@ -259,7 +329,11 @@ export function ConsultationForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Book Consultation</Button>
+        {consultationId && consultationId.length > 0 ? (
+          <Button type="submit">Update </Button>
+        ) : (
+          <Button type="submit">Book </Button>
+        )}
       </form>
     </Form>
   )
