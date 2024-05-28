@@ -14,8 +14,8 @@ const MainPage: React.FC = () => {
 
   const saveUserToDb = async (user: any) => {
     let token = await getAccessTokenSilently()
-    localStorage.setItem('token', token)
-    localStorage.setItem('userId', user.sub)
+    localStorage.setItem("token", token)
+    localStorage.setItem("userId", user.sub)
     const res = await fetch(`${import.meta.env.VITE_REST_API}/users`, {
       method: "POST",
       headers: {
@@ -39,8 +39,18 @@ const MainPage: React.FC = () => {
 
   return (
     <>
-      <Header />
-      <Dashboard />
+      {!isAuthenticated && (
+        <>
+          <Header />
+          <div>Welcome to Med Pharma</div>
+        </>
+      )}
+      {isAuthenticated && (
+        <>
+          <Header />
+          <Dashboard />
+        </>
+      )}
     </>
   )
 }
