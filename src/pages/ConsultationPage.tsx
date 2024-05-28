@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Link } from "react-router-dom"
-import {  Search } from "lucide-react"
+import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -41,6 +41,7 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { toast } from "../../@/components/ui/use-toast"
+import { useMutation } from "react-query"
 
 const ConsultationPage: React.FC = () => {
   return (
@@ -107,7 +108,7 @@ const ConsultationPage: React.FC = () => {
 }
 
 const FormSchema = z.object({
-  patientName: z.string().min(5, {
+  patient: z.string().min(5, {
     message: "Patient Name must be at least 5 characters.",
   }),
   title: z.string().min(5, {
@@ -126,13 +127,27 @@ const FormSchema = z.object({
     message: "Consultation Type must be one of the predefined values.",
   }),
 })
-type FormSchemaType = z.infer<typeof FormSchema>;
+type FormSchemaType = z.infer<typeof FormSchema>
 
 export function ConsultationForm() {
+  const token = localStorage?.getItem("token")
+
+  const mutation = useMutation((bookConsultation) =>
+    fetch(`${import.meta.env.VITE_REST_API}/consultations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(bookConsultation),
+    }).then((res) => res.json())
+  )
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      patientName: "",
+      patient: "",
       title: "",
       description: "",
       healthcareProvider: "",
@@ -141,11 +156,13 @@ export function ConsultationForm() {
     },
   })
 
-  function onSubmit(data:FormSchemaType) {
-    console.log("formData", data)
-    toast({
-      title: "successfully submitted",
+  function onSubmit(data: FormSchemaType) {
+    mutation.mutate({
+      ...data,
+      officerId: localStorage?.getItem("userId"),
     })
+
+    form.reset()
   }
 
   return (
@@ -153,8 +170,8 @@ export function ConsultationForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/3 space-y-6">
         <FormField
           control={form.control}
-          name="patientName"
-          render={({ field  }) => (
+          name="patient"
+          render={({ field }) => (
             <>
               <FormItem>
                 <FormControl>
@@ -242,7 +259,7 @@ export function ConsultationForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Book Consultation</Button>
       </form>
     </Form>
   )

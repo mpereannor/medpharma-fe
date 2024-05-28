@@ -47,9 +47,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useQueryClient, useQuery } from "react-query"
 import { useAuth0 } from "@auth0/auth0-react"
 import { format } from "date-fns"
+import { convertToEmail } from "../utils"
 
 export function Dashboard() {
-  const { getAccessTokenSilently } = useAuth0()
   const token = localStorage?.getItem("token")
 
   const { isLoading, error, data } = useQuery("consultations", async () => {
@@ -208,14 +208,14 @@ export function Dashboard() {
                       </TableHeader>
                       <TableBody>
                         {data.data.map((consultation) => (
-                          <TableRow className="bg-accent">
+                          <TableRow key={consultation.id} className="bg-accent">
                             <>
                               <TableCell>
                                 <div className="font-medium">
                                   {consultation.patient}
                                 </div>
                                 <div className="hidden text-sm text-muted-foreground md:inline">
-                                  liam@example.com
+                                  {convertToEmail(consultation.patient)}
                                 </div>
                               </TableCell>
 
