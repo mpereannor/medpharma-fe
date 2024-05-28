@@ -172,130 +172,124 @@ export function Dashboard() {
                 </CardFooter>
               </Card>
             </div>
-              <div className="flex items-center">
-                <div className="ml-auto flex items-center gap-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-7 gap-1 text-sm"
-                      >
-                        <ListFilter className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only">Filter</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuCheckboxItem checked>
-                        Fulfilled
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem>
-                        Declined
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem>
-                        Refunded
-                      </DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+            <div className="flex items-center">
+              <div className="ml-auto flex items-center gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 gap-1 text-sm"
+                    >
+                      <ListFilter className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only">Filter</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem checked>
+                      Fulfilled
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>
+                      Declined
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>
+                      Refunded
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-                <Card x-chunk="dashboard-05-chunk-3">
-                  <CardHeader className="px-7">
-                    <CardTitle>Consultations</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Patient</TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Type
-                          </TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Medical Condition
-                          </TableHead>
-                          <TableHead className="hidden md:table-cell">
-                            Date
-                          </TableHead>
-                          <TableHead className="text-right">
-                            Healthcare Provider
-                          </TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {data.data.map((consultation) => (
-                          <TableRow key={consultation.id} className="bg-accent">
-                            <>
-                              <TableCell>
-                                <div className="font-medium">
-                                  {consultation.patient}
-                                </div>
-                                <div className="hidden text-sm text-muted-foreground md:inline">
-                                  {convertToEmail(consultation.patient)}
-                                </div>
-                              </TableCell>
+            </div>
+            <Card x-chunk="dashboard-05-chunk-3">
+              <CardHeader className="px-7">
+                <CardTitle>Consultations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Patient</TableHead>
+                      <TableHead className="hidden sm:table-cell">
+                        Type
+                      </TableHead>
+                      <TableHead className="hidden sm:table-cell">
+                        Medical Condition
+                      </TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Date
+                      </TableHead>
+                      <TableHead className="text-right">
+                        Healthcare Provider
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.data.map((consultation) => (
+                      <TableRow key={consultation.id} className="bg-accent">
+                        <>
+                          <TableCell>
+                            <div className="font-medium">
+                              {consultation.patient}
+                            </div>
+                            <div className="hidden text-sm text-muted-foreground md:inline">
+                              {convertToEmail(consultation.patient)}
+                            </div>
+                          </TableCell>
 
-                              <TableCell className="hidden sm:table-cell">
-                                {consultation.consultationType}
-                              </TableCell>
+                          <TableCell className="hidden sm:table-cell">
+                            {consultation.consultationType}
+                          </TableCell>
 
-                              <TableCell className="hidden sm:table-cell">
-                                <Badge className="text-xs" variant="outline">
-                                  {consultation.medicalCondition}
-                                </Badge>
-                              </TableCell>
-                              <TableCell className="hidden md:table-cell">
-                                {formatDate(consultation.createdAt)}
-                              </TableCell>
-                              <TableCell className="hidden md:table-cell">
-                                {consultation.healthcareProvider}
-                              </TableCell>
-                              <TableCell>
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button
-                                      aria-haspopup="true"
-                                      size="icon"
-                                      variant="ghost"
-                                    >
-                                      <MoreHorizontal className="h-4 w-4" />
-                                      <span className="sr-only">
-                                        Toggle menu
-                                      </span>
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>
-                                      Actions
-                                    </DropdownMenuLabel>
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        handleEditConsultation(consultation.id)
-                                      }
-                                    >
-                                      Edit
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        handleDeleteConsultation(
-                                          consultation.id
-                                        )
-                                      }
-                                    >
-                                      Delete
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </TableCell>
-                            </>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
+                          <TableCell className="hidden sm:table-cell">
+                            <Badge className="text-xs" variant="outline">
+                              {consultation.medicalCondition}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {formatDate(consultation.createdAt)}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {consultation.healthcareProvider}
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  aria-haspopup="true"
+                                  size="icon"
+                                  variant="ghost"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">Toggle menu</span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleEditConsultation(consultation.id)
+                                  }
+                                >
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleDeleteConsultation(consultation.id)
+                                  }
+                                >
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
           <div>
             <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
