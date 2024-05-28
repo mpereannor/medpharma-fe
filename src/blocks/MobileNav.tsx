@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState } from "react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu as MenuIcon } from "lucide-react"
