@@ -14,6 +14,7 @@ const MainPage: React.FC = () => {
 
   const saveUserToDb = async (user: any) => {
     let token = await getAccessTokenSilently()
+    localStorage.setItem('token', token)
     const res = await fetch(`${import.meta.env.VITE_REST_API}/users`, {
       method: "POST",
       headers: {
