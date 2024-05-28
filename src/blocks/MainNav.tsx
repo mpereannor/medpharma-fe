@@ -7,7 +7,7 @@ const MainNav = ({
   handleLogout,
 }: any) => {
   return (
-    <div className="className=mr-4 hidden gap-2 md:flex">
+    <div className="className=mr-4 hidden gap-4 md:flex p-2  ">
       {!isAuthenticated && (
         <>
           <a
@@ -20,7 +20,7 @@ const MainNav = ({
             onClick={handleSignUp}
             className="text-sm font-medium text-muted-foreground"
           >
-            SignUp
+            Sign Up
           </a>
         </>
       )}

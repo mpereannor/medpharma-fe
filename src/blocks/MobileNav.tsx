@@ -1,8 +1,7 @@
-//@ts-nocheck
 import { useState } from "react"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger } from "../../@/components/ui/sheet"
+import {Button} from "../../@/components/ui/button"
 import { Menu as MenuIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 const mobileItemsAuth = ["Home", "Profile", "Consultation", "Logout"]
 const MobileNav = ({

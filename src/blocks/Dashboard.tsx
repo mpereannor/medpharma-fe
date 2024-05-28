@@ -1,7 +1,6 @@
-//@ts-nocheck
 import { Link } from "react-router-dom"
 import { ListFilter, Search, MoreHorizontal } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "../../@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -9,7 +8,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "../../@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -18,12 +17,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "../../@/components/ui/dropdown-menu"
 
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "../../@/components/ui/input"
+import { Button } from "../../@/components/ui/button"
 
 import {
   Breadcrumb,
@@ -32,7 +29,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+} from "../../@/components/ui/breadcrumb"
 
 import {
   Table,
@@ -41,11 +38,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "../../@/components/ui/table"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { useQueryClient, useQuery, useMutation } from "react-query"
-import { useAuth0 } from "@auth0/auth0-react"
+import { Avatar, AvatarFallback } from "../../@/components/ui/avatar"
+import { useQueryClient, useQuery } from "react-query"
 import { format } from "date-fns"
 import { convertToEmail } from "../utils"
 import { useNavigate } from "react-router-dom"
@@ -186,16 +182,16 @@ export function Dashboard() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                    <DropdownMenuLabel>Filter  Type</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem checked>
-                      Fulfilled
+                      Out Patient
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem>
-                      Declined
+                      In Patient
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem>
-                      Refunded
+                      Remote
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -225,7 +221,7 @@ export function Dashboard() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {data.data.map((consultation) => (
+                    {data.data.map((consultation: any) => (
                       <TableRow key={consultation.id} className="bg-accent">
                         <>
                           <TableCell>
@@ -288,33 +284,6 @@ export function Dashboard() {
                     ))}
                   </TableBody>
                 </Table>
-              </CardContent>
-            </Card>
-          </div>
-          <div>
-            <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
-              <CardHeader className="flex flex-row items-start bg-muted/50">
-                <div className="grid gap-0.5">
-                  <CardTitle className="group flex items-center gap-2 text-lg">
-                    Patient Id Oe31b70H
-                  </CardTitle>
-                  <CardDescription>Date: November 23, 2023</CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent className="p-6 text-sm">
-                <div className="grid gap-3">
-                  <div className="font-semibold text-left">Patient Details</div>
-                  <ul className="grid gap-3">
-                    <li className="flex items-center justify-between">
-                      <p className="text-muted-foreground ">George Weah</p>
-                    </li>
-                    <li className="flex items-center justify-between text-left ">
-                      <p className="text-muted-foreground m-0">
-                        Description Info dump. More details extra stuff
-                      </p>
-                    </li>
-                  </ul>
-                </div>
               </CardContent>
             </Card>
           </div>
