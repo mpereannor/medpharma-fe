@@ -1,53 +1,59 @@
+import { Link } from "react-router-dom"
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu"
 
+interface MainNavProps {
+  isAuthenticated: boolean
+  handleSignUp: () => void
+  handleLogin: () => void
+  handleLogout: () => void
+}
 
-const MainNav = ({
+const MainNav: React.FC<MainNavProps> = ({
   isAuthenticated,
   handleSignUp,
   handleLogin,
   handleLogout,
-}: any) => {
+}) => {
   return (
-    <div className="className=mr-4 hidden gap-4 md:flex p-2  ">
-      {!isAuthenticated && (
-        <>
-          <a
-            onClick={handleLogin}
-            className="text-sm font-medium text-muted-foreground"
-          >
-            Login
-          </a>
-          <a
-            onClick={handleSignUp}
-            className="text-sm font-medium text-muted-foreground"
-          >
-            Sign Up
-          </a>
-        </>
-      )}
-      {isAuthenticated && (
-        <>
-          <a href="/" className="text-sm font-medium text-muted-foreground">
-            Home
-          </a>
-          <a
-            href="/profile"
-            className="text-sm font-medium text-muted-foreground"
-          >
-            Profile
-          </a>
-          <a
-            href="/consultation"
-            className="text-sm font-medium text-muted-foreground"
-          >
-            Consultation
-          </a>
-          <a
-            onClick={handleLogout}
-            className="text-sm font-medium text-muted-foreground"
-          >
-            Logout
-          </a>
-        </>
+    <div className="mr-4  gap-2 md:hidden">
+      {!isAuthenticated ? (
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link to="#" onClick={handleLogin}>
+                Login
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="#" onClick={handleSignUp}>
+                Sign Up
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      ) : (
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link to="/">Home</Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/profile">Profile</Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/consultation">Consultation</Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/" onClick={handleLogout}>
+                Logout
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
       )}
     </div>
   )

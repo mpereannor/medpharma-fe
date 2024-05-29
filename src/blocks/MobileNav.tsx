@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetTrigger } from "../../@/components/ui/sheet"
 import {Button} from "../../@/components/ui/button"
 import { Menu as MenuIcon } from "lucide-react"
 
-const mobileItemsAuth = ["Home", "Profile", "Consultation", "Logout"]
+const mobileItemsAuth = ["Home", "Profile", "Consultation"]
 const MobileNav = ({
   isAuthenticated,
   handleSignUp,
@@ -36,7 +36,7 @@ const MobileNav = ({
               <Button
                 variant="link"
                 onClick={() => {
-                  handleLogin
+                  handleLogin()
                   setOpen(false)
                 }}
               >
